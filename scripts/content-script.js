@@ -4,7 +4,7 @@ let settings = {
     speed: 10,
     amplitude: 0.5,
     offset: 1,
-    updateRate: 100
+    updateRate: 10
 }
 
 const clamp = (val, min, max) => Math.min(Math.max(val, min), max)
