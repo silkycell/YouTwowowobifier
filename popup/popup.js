@@ -18,8 +18,6 @@ offsetNumber.addEventListener("change", sendSettingData);
 
 updateRateNumber.addEventListener("change", sendSettingData);
 
-versionNumber.innerText = "v" + chrome.runtime.getManifest().version
-
 function sendSettingData() {
     chrome.runtime.sendMessage({ event: "settingData", settings: getSettings() })
 }
@@ -45,3 +43,20 @@ chrome.storage.local.get().then((savedSettings) => {
 
     if (savedSettings.updateRate !== undefined) updateRateNumber.value = savedSettings.updateRate
 })
+
+// non setting stuff
+
+document.addEventListener('DOMContentLoaded', function () {
+    var links = document.getElementsByTagName("a");
+    for (var i = 0; i < links.length; i++) {
+        (function () {
+            var ln = links[i];
+            var location = ln.href;
+            ln.onclick = function () {
+                chrome.tabs.create({active: true, url: location});
+            };
+        })();
+    }
+});
+
+versionNumber.innerText = "v" + chrome.runtime.getManifest().version
