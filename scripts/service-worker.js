@@ -9,7 +9,7 @@ const defaultSettings = {
 
 let settings = defaultSettings
 
-runForAllTabs((tab) => chrome.tabs.reload(tab.id))
+// runForAllTabs((tab) => chrome.tabs.reload(tab.id))
 
 chrome.storage.local.get().then((savedSettings) => {
     Object.keys(savedSettings).forEach(function(key) {
