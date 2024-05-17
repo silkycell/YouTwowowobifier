@@ -10,14 +10,9 @@ let settings = {
 runForAllTabs((tab) => chrome.tabs.reload(tab.id))
 
 chrome.storage.local.get().then((savedSettings) => {
-    if (savedSettings.isEnabled !== undefined) settings.isEnabled = savedSettings.isEnabled
-    if (savedSettings.preservesPitch !== undefined) settings.preservesPitch = savedSettings.preservesPitch
-
-    if (savedSettings.speed !== undefined) settings.speed = savedSettings.speed
-    if (savedSettings.amplitude !== undefined) settings.amplitude = savedSettings.amplitude
-    if (savedSettings.offset !== undefined) settings.offset = savedSettings.offset
-
-    if (savedSettings.updateRate !== undefined) settings.updateRate = savedSettings.updateRate
+    Object.keys(savedSettings).forEach(function(key) {
+        settings[key] = savedSettings[key]
+    });
 
     chrome.storage.local.set(settings)
 })
