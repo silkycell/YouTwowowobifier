@@ -30,7 +30,7 @@ let updateIntervalID = setInterval(updatePlaybackRate, settings.updateRate)
 chrome.runtime.onMessage.addListener(
     function (request) {
         if (request.event === "onSettingsChanged")
-            loadSettings(request.settings)
+            chrome.storage.local.get().then(loadSettings)
     });
 
 let lastSettings = settings

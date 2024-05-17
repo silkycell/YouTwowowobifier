@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(
 
 function settingsUpdated() {
     chrome.storage.local.set(settings)
-    runForAllTabs((tab) => chrome.tabs.sendMessage(tab.id, { event: "onSettingsChanged", settings: settings }))
+    runForAllTabs((tab) => chrome.tabs.sendMessage(tab.id, { event: "onSettingsChanged" }))
 }
 
 function runForAllTabs(func) {
