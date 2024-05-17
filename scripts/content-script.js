@@ -19,13 +19,6 @@ function updatePlaybackRate() {
     });
 }
 
-chrome.runtime.onMessage.addListener(
-    function (request) {
-        if (request.event === "onSettingsChanged")
-            chrome.storage.local.get().then(loadSettings)
-    }
-);
-
 let lastSettings = settings
 function loadSettings(newSettings) {
     settings = newSettings
@@ -44,5 +37,12 @@ function loadSettings(newSettings) {
 
     lastSettings = settings
 }
+
+chrome.runtime.onMessage.addListener(
+    function (request) {
+        if (request.event === "onSettingsChanged")
+            chrome.storage.local.get().then(loadSettings)
+    }
+);
 
 chrome.storage.local.get().then(loadSettings)
