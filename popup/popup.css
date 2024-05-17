@@ -4,6 +4,12 @@
     text-align: right;
 }
 
+#button_reset {
+    margin: 0 auto;
+    margin-top: 5px;
+    display: block;
+}
+
 h2 {
     text-align: center;
     margin-top: 0px;

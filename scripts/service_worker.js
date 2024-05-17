@@ -1,4 +1,4 @@
-let settings = {
+const defaultSettings = {
     isEnabled: false,
     preservesPitch: false,
     speed: 10,
@@ -6,6 +6,8 @@ let settings = {
     offset: 1,
     updateRate: 10
 }
+
+let settings = defaultSettings
 
 runForAllTabs((tab) => chrome.tabs.reload(tab.id))
 
@@ -18,11 +20,17 @@ chrome.storage.local.get().then((savedSettings) => {
 })
 
 chrome.runtime.onMessage.addListener(
-    function (request) {
-        if (request.event === "updateSettingsData") {
-            settings = request.settings
-
-            settingsUpdated()
+    function (request, _sender, sendResponse) {
+        switch (request.event) {
+            case "updateSettingsData":
+                settings = request.settings
+                settingsUpdated()
+                break;
+            case "resetSettings":
+                settings = defaultSettings
+                settingsUpdated()
+                sendResponse(settings)
+                break;
         }
     }
 )

@@ -11,6 +11,8 @@ settingsMap.forEach((object) => {
     object.addEventListener("change", sendSettingsData);
 })
 
+document.getElementById('button_reset').addEventListener("click", resetSettings)
+
 function getSettings() {
     var settings = {}
 
@@ -28,22 +30,28 @@ function getSettings() {
     return settings
 }
 
-function sendSettingsData() {
-    chrome.runtime.sendMessage({ event: "updateSettingsData", settings: getSettings() })
-}
-
-chrome.storage.local.get().then((savedSettings) => {
-    Object.keys(savedSettings).forEach(function(key) {
+function loadSettings(settings) {
+    Object.keys(settings).forEach(function (key) {
         if (settingsMap.has(key)) {
             var object = settingsMap.get(key)
             switch (object.type) {
                 case "checkbox":
-                    object.checked = savedSettings[key]
+                    object.checked = settings[key]
                     break
                 case "number":
-                    object.value = savedSettings[key]
+                    object.value = settings[key]
                     break
             }
         }
     });
-})
+}
+
+function resetSettings() {
+    chrome.runtime.sendMessage({ event: "resetSettings" }, loadSettings);
+}
+
+function sendSettingsData() {
+    chrome.runtime.sendMessage({ event: "updateSettingsData", settings: getSettings() })
+}
+
+chrome.storage.local.get().then(loadSettings)
