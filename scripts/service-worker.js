@@ -1,10 +1,10 @@
 const defaultSettings = {
-    isEnabled: false,
-    preservesPitch: false,
-    speed: 10,
-    amplitude: 0.5,
-    offset: 1,
-    updateRate: 10
+    "isEnabled": false,
+    "preservesPitch": false,
+    "speed": 10,
+    "amplitude": 0.5,
+    "offset": 0.9,
+    "updateRate": 10,
 }
 
 let settings = defaultSettings
