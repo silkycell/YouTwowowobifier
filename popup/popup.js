@@ -19,7 +19,7 @@ offsetNumber.addEventListener("change", sendSettingData);
 updateRateNumber.addEventListener("change", sendSettingData);
 
 function sendSettingData() {
-    chrome.runtime.sendMessage({ event: "settingData", settings: getSettings() })
+    chrome.runtime.sendMessage({ event: "updateSettingsData", settings: getSettings() })
 }
 
 function getSettings() {

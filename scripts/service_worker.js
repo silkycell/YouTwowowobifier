@@ -24,7 +24,7 @@ chrome.storage.local.get().then((savedSettings) => {
 
 chrome.runtime.onMessage.addListener(
     function (request) {
-        if (request.event === "settingData") {
+        if (request.event === "updateSettingsData") {
             settings = request.settings
 
             settingsUpdated()
