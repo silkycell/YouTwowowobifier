@@ -1,43 +1,49 @@
-const enabledCheckbox = document.getElementById('checkbox_enabled')
-const pitchCheckbox = document.getElementById('checkbox_pitch')
+const settingsMap = new Map([
+    ["isEnabled", document.getElementById('checkbox_enabled')],
+    ["preservesPitch", document.getElementById('checkbox_pitch')],
+    ["speed", document.getElementById('number_speed')],
+    ["amplitude", document.getElementById('number_amplitude')],
+    ["offset", document.getElementById('number_offset')],
+    ["updateRate", document.getElementById('number_updateRate')]
+]);
 
-const speedNumber = document.getElementById('number_speed')
-const amplitudeNumber = document.getElementById('number_amplitude')
-const offsetNumber = document.getElementById('number_offset')
+settingsMap.forEach((object) => {
+    object.addEventListener("change", sendSettingsData);
+})
 
-const updateRateNumber = document.getElementById('number_updateRate')
+function getSettings() {
+    var settings = {}
 
-enabledCheckbox.addEventListener("click", sendSettingData);
-pitchCheckbox.addEventListener("click", sendSettingData);
+    settingsMap.forEach((object, key) => {
+        switch (object.type) {
+            case "checkbox":
+                settings[key] = object.checked
+                break
+            case "number":
+                settings[key] = parseFloat(object.value)
+                break
+        }
+    })
 
-speedNumber.addEventListener("change", sendSettingData);
-amplitudeNumber.addEventListener("change", sendSettingData);
-offsetNumber.addEventListener("change", sendSettingData);
+    return settings
+}
 
-updateRateNumber.addEventListener("change", sendSettingData);
-
-function sendSettingData() {
+function sendSettingsData() {
     chrome.runtime.sendMessage({ event: "updateSettingsData", settings: getSettings() })
 }
 
-function getSettings() {
-    return {
-        isEnabled: enabledCheckbox.checked,
-        preservesPitch: pitchCheckbox.checked,
-        speed: parseFloat(speedNumber.value),
-        amplitude: parseFloat(amplitudeNumber.value),
-        offset: parseFloat(offsetNumber.value),
-        updateRate: parseFloat(updateRateNumber.value)
-    }
-}
-
 chrome.storage.local.get().then((savedSettings) => {
-    if (savedSettings.isEnabled !== undefined) enabledCheckbox.checked = savedSettings.isEnabled
-    if (savedSettings.preservesPitch !== undefined) pitchCheckbox.checked = savedSettings.preservesPitch
-
-    if (savedSettings.speed !== undefined) speedNumber.value = savedSettings.speed
-    if (savedSettings.amplitude !== undefined) amplitudeNumber.value = savedSettings.amplitude
-    if (savedSettings.offset !== undefined) offsetNumber.value = savedSettings.offset
-
-    if (savedSettings.updateRate !== undefined) updateRateNumber.value = savedSettings.updateRate
+    Object.keys(savedSettings).forEach(function(key) {
+        if (settingsMap.has(key)) {
+            var object = settingsMap.get(key)
+            switch (object.type) {
+                case "checkbox":
+                    object.checked = savedSettings[key]
+                    break
+                case "number":
+                    object.value = savedSettings[key]
+                    break
+            }
+        }
+    });
 })
